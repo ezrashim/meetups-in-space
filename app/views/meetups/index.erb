@@ -1,0 +1,9 @@
+<h1>Meetups</h1>
+  <form id="create" method="get" action="/new">
+   <input type="submit" value="Create a New Meetup">
+  </form>
+<ul>
+  <% @meetups.each do |meetup| %>
+  <li><a href="meetups/<%=meetup.id%> "><%= meetup.name%></a></li>
+  <% end %>
+</ul>
