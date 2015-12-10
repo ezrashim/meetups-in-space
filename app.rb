@@ -18,7 +18,6 @@ get '/auth/github/callback' do
   user = User.find_or_create_from_omniauth(env['omniauth.auth'])
   session[:user_id] = user.id
   flash[:notice] = "You're now signed in as #{user.username}!"
-
   redirect '/'
 end
 
@@ -36,11 +35,17 @@ end
 
 get '/meetups/:id' do
   @meetup = Meetup.find(params[:id])
-  erb :'meetups/show'
+  @memberships = Membership.where(meetup_id: params[:id])
+
+  unless @memberships.nil?
+    erb :'meetups/show'
+  else @memberships = []
+    erb :'meetups/show'
+  end
+
 end
 
 get '/new' do
-
   if current_user
     erb :'meetups/new'
   else
@@ -53,28 +58,42 @@ post '/new' do
 @name = params[:meetup_name]
 @description = params[:meetup_description]
 @location = params[:meetup_location]
-@creator = User.find(session[:user_id]).username
+@user = User.find(session[:user_id])
+@creator = @user.username
 
-unless @name.empty? || @description.empty? || @location.empty?
-new_meetup = Meetup.create(
-  name: params[:meetup_name],
-  description: params[:meetup_description],
-  location: params[:meetup_location],
-  creator: User.find(session[:user_id]).username
-  )
-end
+    new_meetup = Meetup.new(
+      name: params[:meetup_name],
+      description: params[:meetup_description],
+      location: params[:meetup_location],
+      creator: @creator
+      )
 
-  if !new_meetup.nil?
+  if new_meetup.save
     flash[:notice] = "You have just created a new meetup!"
+    Membership.create(user_id: @user.id, meetup_id: new_meetup.id)
     redirect "/meetups/#{new_meetup.id}"
   else
-    if @name.empty?
-      flash[:notice] ="Please fill in the 'Name' section."
-    elsif @description.empty?
-      flash[:notice] = "Please fill in the 'Description' section."
-    elsif @location.empty?
-      flash[:notice] = "Please fill in the 'Location' section."
-    end
-    erb :'meetups/new'
+    flash.now[:notice] ="Please fill in all the sections."
+    erb :'/meetups/new'
   end
+end
+
+post '/meetups/:id' do
+  if current_user
+    @meetup = Meetup.find(params[:id]).name
+    @user = User.find(session[:user_id]).id
+    @new_membership = Membership.new(user_id: @user, meetup_id: params[:id])
+
+    if @new_membership.save
+      flash[:notice] = "You have joined the meetup #{@meetup}!"
+      redirect "/meetups/#{params[:id]}"
+    else
+      flash[:notice] = "You are already a member of #{@meetup}!"
+      redirect "/"
+    end
+
+  else
+    flash[:notice] = "You need to sign in."
+    redirect "/meetups/#{params[:id]}"
+end
 end

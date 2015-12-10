@@ -4,31 +4,31 @@
 # Example:
 #
 #   Person.create(first_name: 'Eric', last_name: 'Kelly')
-require 'faker'
-
-
-100.times do
-  User.create(
-  provider: "#{Faker::Hacker.noun}",
-  uid: "#{Faker::Number.number(4)}",
-  username: "#{Faker::Hacker.noun}",
-  email: "#{Faker::Internet.free_email}",
-  avatar_url: "#{Faker::Internet.url}"
-  )
-end
-
-100.times do
-  Meetup.create(
-    name: "#{Faker::Hacker.adjective} #{Faker::Hacker.noun}",
-    description: "#{Faker::Hacker.say_something_smart}",
-    location: "#{Faker::Hacker.noun}",
-    creator: "#{Faker::Hacker.noun}"
-  )
-end
-
-100.times do
-  Membership.create(
-  user_id: rand(100) + 1,
-  meetup_id: rand(100) + 1
-  )
-end
+# require 'faker'
+#
+#
+# 100.times do
+#   User.create(
+#   provider: "Github",
+#   uid: Faker::Internet.password(8),
+#   username: Faker::Internet.user_name,
+#   email: Faker::Internet.free_email,
+#   avatar_url: Faker::Avatar.image
+#   )
+# end
+#
+# 100.times do
+#   Meetup.create(
+#     name: "#{Faker::Hacker.adjective} #{Faker::Hacker.noun}",
+#     description: Faker::Lorem.sentence,
+#     location: "#{Faker::Address.street_address}, #{Faker::Address.city}, #{Faker::Address.state}",
+#     creator: User.offset(rand(User.count)).first
+#   )
+# end
+#
+# 100.times do
+#   Membership.find_or_create_by(
+#   user_id: Faker::Number.between(1, 100),
+#   meetup_id: Faker::Number.between(1, 100)
+#   )
+# end

@@ -1,7 +1,5 @@
 require 'spec_helper'
 require 'launchy'
-require 'capybara'
-require 'pry'
 
 feature "User signs in" do
   let(:user) do
