@@ -1,0 +1,18 @@
+<h1>Meetups</h1>
+
+<!--  name form -->
+<!--  description form -->
+<!--  location form  -->
+<form id="update_meetup" action="/edit/<%=@meetup.id%>" method="post">
+  <label for="meetup_name">Name</label>
+    <input type="text" name="meetup_name" id="meetup_name" value="<%=@name%>">
+    <input type="hidden" name="_method" value=patch>
+  <label for="meetup_description">Description</label>
+    <input type="text" name="meetup_description" id="meetup_description" value="<%=@description%>">
+    <input type="hidden" name="_method" value=patch>
+  <label for="meetup_location">Location</label>
+    <input type="text" name="meetup_location" id="meetup_location" value="<%=@location%>">
+    <input type="hidden" name="_method" value=patch>
+
+    <input type="submit" value="Update">
+</form>

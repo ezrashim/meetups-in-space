@@ -1,0 +1,22 @@
+<h1>Meetups</h1>
+
+<h3> Name: </h3>
+<h4><%= @meetup.name %></h4>
+<h3> Description: </h3>
+<h4><%= @meetup.description %></h4>
+<h3> Location: </h3>
+<h4><%= @meetup.location %></h4>
+<h3> Creator: <%= @meetup.creator %></h3>
+<h3>Joined members</h3>
+<ul> <% @memberships.map do |membership| %>
+  <li> <%= User.find(membership.user).username %> <img height="42" width="42" src="<%= User.find(membership.user).avatar_url %>" alt="avatar" /></li>
+ <% end %>
+ </ul>
+ <form id="edit" method="get" action="/edit/<%=@meetup.id%>">
+  <input type="submit" value="Edit">
+ </form>
+
+ <form id="delete" action="/edit/<%=@meetup.id%>" method="post">
+    <input type="hidden" name="_method" value="delete">
+    <input type="submit" value="Delete">
+ </form>
